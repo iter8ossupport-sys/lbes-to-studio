@@ -4,6 +4,7 @@ import { GradientBorder } from "./ui/GradientBorder";
 import { RollingText } from "./ui/RollingText";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 
 const NavLink = ({
   children,
@@ -40,6 +41,7 @@ const NavLink = ({
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, loading, signOut } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -58,16 +60,12 @@ export const Navbar = () => {
           className="flex items-center gap-3 group"
           onClick={closeMobileMenu}
         >
-          <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-[0_0_15px_rgba(77,121,255,0.6)]">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-orange-500 rounded-full animate-spin [animation-duration:10s]"></div>
-            <div className="absolute inset-[2px] bg-black rounded-full"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+          <div className="relative w-9 h-9 rounded-xl border border-white/20 bg-gradient-to-br from-blue-500 via-indigo-500 to-orange-500 p-[1px] shadow-[0_0_18px_rgba(59,130,246,0.35)]">
+            <div className="w-full h-full rounded-[10px] bg-black flex items-center justify-center">
+              <span className="text-white text-sm font-black tracking-tight">L</span>
             </div>
           </div>
-          <span className="text-white font-bold text-lg tracking-tight">
-            LBES
-          </span>
+          <span className="text-white font-bold text-lg tracking-tight">LBES</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -76,7 +74,8 @@ export const Navbar = () => {
           <NavLink to="/examples">Examples</NavLink>
           <NavLink to="/pricing">Pricing</NavLink>
           <NavLink to="/#faq">FAQ</NavLink>
-          <NavLink to="/login">Login</NavLink>
+          <NavLink to={user ? "/settings" : "/login"}>{loading ? "Account" : user ? "Account" : "Login"}</NavLink>
+          {user && <button onClick={() => void signOut()} className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Sign out</button>}
           {/* Desktop CTA */}
           <GradientBorder
             gradient="from-orange-500 via-red-500 to-orange-600"
@@ -124,9 +123,10 @@ export const Navbar = () => {
             <NavLink to="/#faq" onClick={closeMobileMenu}>
               FAQ
             </NavLink>
-            <NavLink to="/login" onClick={closeMobileMenu}>
-              Login
+            <NavLink to={user ? "/settings" : "/login"} onClick={closeMobileMenu}>
+              {user ? "Account" : "Login"}
             </NavLink>
+            {user && <button onClick={() => { void signOut(); closeMobileMenu(); }} className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Sign out</button>}
             {/* Mobile CTA */}
             <GradientBorder
               gradient="from-orange-500 via-red-500 to-orange-600"

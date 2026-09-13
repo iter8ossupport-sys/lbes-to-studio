@@ -15,6 +15,9 @@ import { AuthProvider } from './context/AuthContext';
 import { InterviewProvider } from './context/InterviewContext';
 import { PaymentReturn } from './pages/PaymentReturn';
 import { OrderPage } from './pages/OrderPage';
+import { Settings } from './pages/Settings';
+import { RefundPolicy } from './pages/RefundPolicy';
+import { Contact } from './pages/Contact';
 
 const ScrollToAnchor = () => {
   const { pathname, hash } = useLocation();
@@ -50,6 +53,7 @@ function App() {
             <Route path="/interview" element={<Interview />} />
             <Route path="/specification" element={<InterviewProvider><Specification /></InterviewProvider>} />
             <Route path="/login" element={<Auth mode="login" />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/signup" element={<Auth mode="signup" />} />
             <Route path="/forgot-password" element={<Auth mode="forgot" />} />
             <Route path="/reset-password" element={<Auth mode="reset" />} />
@@ -60,6 +64,8 @@ function App() {
             <Route path="/order/:orderId" element={<OrderPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

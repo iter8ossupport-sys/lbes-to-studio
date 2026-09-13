@@ -18,7 +18,7 @@ export const PaymentReturn: React.FC<PaymentReturnProps> = ({ cancelled = false 
     if (cancelled || !orderId || !supabase) { setChecking(false); return; }
     let active = true;
     const check = async () => {
-      const { data } = await supabase.from('orders').select('order_id, package_id, payment_option, payment_status').eq('order_id', orderId).maybeSingle();
+      const { data } = await supabase!.from('orders').select('order_id, package_id, payment_option, payment_status').eq('order_id', orderId).maybeSingle();
       if (active) { setOrder(data as PaymentOrder | null); setChecking(false); }
     };
     void check();

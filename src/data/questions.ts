@@ -7,7 +7,12 @@ const select = (id: string, section: InterviewSection, question: string, labels:
 const yesNo = (id: string, section: InterviewSection, question: string, optional = false): Question => select(id, section, question, ['Yes', 'No'], false, optional);
 const number = (id: string, section: InterviewSection, question: string, helperText = '', optional = false): Question => ({ id, section, question, placeholder: 'Enter a number...', helperText, answerType: 'number', required: !optional, optional, priority: 0 });
 
-export const CALIBRATION_QUESTIONS: never[] = [];
+export const CALIBRATION_QUESTIONS: Array<{
+  id: string;
+  question: string;
+  options: Option[];
+  multiSelect: boolean;
+}> = [];
 
 export const MASTER_QUESTIONS: Question[] = [
   select('market', 'trading-foundation', 'Which market do you trade?', ['Forex', 'Gold', 'Crypto', 'Stocks', 'Indices', 'Other']),

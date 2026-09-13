@@ -5,6 +5,7 @@ import { TrustLogos } from '../components/TrustLogos';
 import { FAQ } from '../components/FAQ';
 import { CTA } from '../components/CTA';
 import { RollingText } from '../components/ui/RollingText';
+import { Linkedin, Mail, MessageCircle, Twitter } from 'lucide-react';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -45,11 +46,11 @@ export const Contact = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6 mb-24">
         
         {/* --- HERO SECTION --- */}
-        <div className="flex flex-col items-center text-center mb-16">
+        <div className="flex flex-col items-center text-center mb-12">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-semibold text-white tracking-tight mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white tracking-tight mb-4"
           >
             Chat with the team
           </motion.h1>
@@ -58,10 +59,29 @@ export const Contact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+            className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed"
           >
-            Converge AI helps you tackle data bottlenecks, streamline analysis, and make smarter decisions with ease.
+            Have a question about your strategy interview, specification, order, or delivery? Reach the LBES support team directly.
           </motion.p>
+        </div>
+
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          <a href="mailto:lbes.support@gmail.com" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-orange-500/40 transition-colors">
+            <Mail size={19} className="text-orange-400" />
+            <span className="text-sm break-all">lbes.support@gmail.com</span>
+          </a>
+          <a href="https://whatsapp.com/channel/0029VbASdkj90x2rc9CPHM27" target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-green-500/40 transition-colors">
+            <MessageCircle size={19} className="text-green-400" />
+            <span className="text-sm">WhatsApp Channel</span>
+          </a>
+          <a href="https://x.com/yash0to1" target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-white/40 transition-colors">
+            <Twitter size={19} className="text-white" />
+            <span className="text-sm">X / @yash0to1</span>
+          </a>
+          <a href="https://www.linkedin.com/in/yash-tyagi-089a49345/" target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-blue-500/40 transition-colors">
+            <Linkedin size={19} className="text-blue-400" />
+            <span className="text-sm">LinkedIn</span>
+          </a>
         </div>
 
         {/* --- CONTACT FORM --- */}

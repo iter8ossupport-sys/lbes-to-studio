@@ -54,38 +54,56 @@ export const TermsConditions = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-sm md:text-base"
           >
-            Last Updated: January 2025
+            Last Updated: September 2026
           </motion.p>
         </div>
 
         <div className="border-t border-white/5 pt-16">
           <Section title="Service Description" delay={0.3}>
             <p>
-              LBES provides trading strategy engineering services. We translate your strategy explanation into TradingView indicators and/or MT5 expert advisors based on the package you select.
+              LBES provides strategy documentation and software engineering services. We translate the rules and examples you provide into the TradingView, TradingView + MT5, or Full Engineering package you select. The specification is the source of truth for delivery.
             </p>
           </Section>
 
-          <Section title="No Performance Guarantee" delay={0.4}>
+          <Section title="Accounts and Customer Information" delay={0.35}>
             <p>
-              LBES does not guarantee trading performance, profitability, or specific results. Backtesting shows historical performance only and does not predict future results. Trading involves risk of loss.
+              You are responsible for providing accurate information, protecting your account credentials, and reviewing your strategy specification. Do not submit passwords, payment credentials, or another person’s private information in the interview.
             </p>
           </Section>
 
-          <Section title="Intellectual Property" delay={0.5}>
+          <Section title="Specification, Edits, and Delivery" delay={0.4}>
             <p>
-              The strategy you provide remains your intellectual property. The engineered software deliverable is licensed to you for personal use. You may not resell or redistribute the software.
+              You can review and edit the generated specification before approval. After approval, engineering is based on the approved specification. Delivery targets shown on package pages are targets, not guarantees, and may change when requirements are incomplete, changed, or technically blocked.
             </p>
           </Section>
 
-          <Section title="Payment & Refunds" delay={0.6}>
+          <Section title="No Financial or Performance Advice" delay={0.5}>
             <p>
-              Payment is processed through our secure payment provider. Refund terms are outlined in our Refund Policy. Engineering begins after payment confirmation.
+              LBES does not provide investment advice and does not guarantee profitability, win rate, funding, or any trading result. Backtests are historical analyses and do not predict future performance. You are solely responsible for deciding whether or how to use any deliverable.
             </p>
           </Section>
 
-          <Section title="Limitation of Liability" delay={0.7}>
+          <Section title="Intellectual Property and Use" delay={0.6}>
             <p>
-              LBES is not liable for trading losses, missed opportunities, or any financial outcomes resulting from use of the delivered software. Use of the software is at your own risk.
+              You retain ownership of the strategy information you provide. Subject to payment and these terms, LBES grants you a non-transferable license to use the delivered software for your own trading workflow. You may not resell, sublicense, publish, or redistribute LBES source code or deliverables unless agreed in writing.
+            </p>
+          </Section>
+
+          <Section title="Payment and Refunds" delay={0.7}>
+            <p>
+              Payments are processed through Razorpay hosted payment pages. A booking payment reserves work under the selected package; it is not an automatic charge for the remaining balance. Refund and cancellation rules are described in the Refund Policy.
+            </p>
+          </Section>
+
+          <Section title="Acceptable Use and Liability" delay={0.8}>
+            <p>
+              You may not use LBES to submit unlawful content, abuse the service, bypass access controls, or upload malicious files. To the extent permitted by law, LBES is not liable for trading losses, missed opportunities, market conditions, outages, or indirect financial outcomes resulting from the service or deliverables.
+            </p>
+          </Section>
+
+          <Section title="Changes, Suspension, and Contact" delay={0.9}>
+            <p>
+              We may update these terms, suspend abusive accounts, or change service features. Continued use after an update means you accept the revised terms. Contact LBES through the website support page for questions or disputes.
             </p>
           </Section>
         </div>

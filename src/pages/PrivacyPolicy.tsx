@@ -54,38 +54,44 @@ export const PrivacyPolicy = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-sm md:text-base"
           >
-            Last Updated: January 2025
+            Last Updated: September 2026
           </motion.p>
         </div>
 
         <div className="border-t border-white/5 pt-16">
           <Section title="Information We Collect" delay={0.3}>
             <p>
-              We collect information you provide directly, including your name, email, and strategy details during the interview process. We also collect payment information through our secure payment provider.
+              We collect your email and account details, the answers and files you submit during the strategy interview, order identifiers, and basic service activity needed to operate LBES. Card, UPI, and other payment credentials are handled by Razorpay and are not stored by LBES.
             </p>
           </Section>
 
           <Section title="How We Use Your Data" delay={0.4}>
             <p>
-              Your strategy information is used solely to engineer the software deliverable you selected. We do not share, sell, or use your strategy for any purpose other than delivering your order.
+              We use your data to authenticate your account, save and restore your interview, prepare your specification, deliver the package you selected, process support requests, and verify payment status. We do not sell your strategy or use it to make trading recommendations.
             </p>
           </Section>
 
-          <Section title="Data Security" delay={0.5}>
+          <Section title="Service Providers" delay={0.5}>
             <p>
-              We employ industry-standard security measures to protect your information. Your strategy details are stored securely and deleted after delivery unless you request otherwise.
+              LBES uses Supabase for authentication and application data storage and Razorpay for hosted payment pages and payment notifications. These providers process data under their own terms and privacy policies. Access to customer records is restricted by account ownership policies.
             </p>
           </Section>
 
-          <Section title="Your Rights" delay={0.6}>
+          <Section title="Retention and Your Rights" delay={0.6}>
             <p>
-              You have the right to request access to, modification of, or deletion of your personal data. Contact us at any time to exercise these rights.
+              You may request access, correction, export, or deletion of your personal data, subject to records we must retain for legal, accounting, fraud-prevention, or payment purposes. Contact LBES through the support channel listed on the website.
             </p>
           </Section>
 
-          <Section title="Contact Us" delay={0.7}>
+          <Section title="Cookies and Security" delay={0.7}>
             <p>
-              If you have questions about this Privacy Policy, please contact us through our support page.
+              LBES uses browser storage and session technologies to keep you signed in, restore interview progress, and protect account workflows. Do not share your password or service-role credentials. LBES will not ask for a Supabase service-role key.
+            </p>
+          </Section>
+
+          <Section title="Changes and Contact" delay={0.8}>
+            <p>
+              We may update this policy as the service changes. The effective date above identifies the current version. Questions or privacy requests should be sent through the LBES support/contact page.
             </p>
           </Section>
         </div>

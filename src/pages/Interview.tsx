@@ -144,7 +144,7 @@ const InterviewContent: React.FC = () => {
       return;
     }
     localStorage.setItem('lbes_pending_order_id', orderId);
-    window.location.assign(`${getPaymentLink(selectedPackage, option)}?order_id=${encodeURIComponent(orderId)}`);
+    window.location.assign(getPaymentLink(selectedPackage, option));
   };
 
   const handleEditSection = (sectionId: string) => {

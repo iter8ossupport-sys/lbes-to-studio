@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { CreditCard, Shield, Check, ArrowLeft } from 'lucide-react';
 import { GradientBorder } from '../ui/GradientBorder';
 import { RollingText } from '../ui/RollingText';
-import { PACKAGES, Package } from '../../types/interview';
+import { PACKAGES } from '../../types/interview';
+import { getPaymentAmounts, PaymentOption } from '../../lib/payments';
 
 interface PaymentOptionsProps {
   selectedPackage: 'tradingview' | 'tradingview-mt5' | 'full';
-  onSelectOption: (option: 'booking' | 'full') => void;
+  onSelectOption: (option: PaymentOption) => void | Promise<void>;
   onBack: () => void;
 }
 
@@ -17,9 +18,11 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   onBack
 }) => {
   const [hoveredOption, setHoveredOption] = useState<'booking' | 'full' | null>(null);
+  const [selectedOption, setSelectedOption] = useState<PaymentOption | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pkg = PACKAGES.find(p => p.id === selectedPackage) || PACKAGES[1];
-  const bookingAmount = (pkg.price * 0.05).toFixed(2);
+  const { packagePrice, amountDueNow: bookingAmount } = getPaymentAmounts(selectedPackage, 'booking');
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -59,11 +62,12 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          onClick={() => onSelectOption('booking')}
+          onClick={() => setSelectedOption('booking')}
+          aria-pressed={selectedOption === 'booking'}
           onMouseEnter={() => setHoveredOption('booking')}
           onMouseLeave={() => setHoveredOption(null)}
           className={`relative bg-[#0A0A0A] border rounded-2xl p-8 text-left transition-all ${
-            hoveredOption === 'booking' 
+            selectedOption === 'booking' || hoveredOption === 'booking'
               ? 'border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.1)]' 
               : 'border-white/10 hover:border-white/20'
           }`}
@@ -79,13 +83,13 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
           </p>
 
           <div className="flex items-baseline gap-1 mb-6">
-            <span className="text-4xl font-bold text-white">${bookingAmount}</span>
+            <span className="text-4xl font-bold text-white">${bookingAmount.toFixed(2)}</span>
             <span className="text-gray-500 text-sm">booking fee</span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Shield size={14} />
-            <span>Secure payment via Stripe</span>
+            <span>Secure payment via Razorpay</span>
           </div>
         </motion.button>
 
@@ -93,11 +97,12 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          onClick={() => onSelectOption('full')}
+          onClick={() => setSelectedOption('full')}
+          aria-pressed={selectedOption === 'full'}
           onMouseEnter={() => setHoveredOption('full')}
           onMouseLeave={() => setHoveredOption(null)}
           className={`relative bg-[#0A0A0A] border rounded-2xl p-8 text-left transition-all ${
-            hoveredOption === 'full' 
+            selectedOption === 'full' || hoveredOption === 'full'
               ? 'border-orange-500/50 shadow-[0_0_30px_rgba(249,115,22,0.1)]' 
               : 'border-white/10 hover:border-white/20'
           }`}
@@ -117,13 +122,13 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
           </p>
 
           <div className="flex items-baseline gap-1 mb-6">
-            <span className="text-4xl font-bold text-white">${pkg.price}</span>
+            <span className="text-4xl font-bold text-white">${packagePrice}</span>
             <span className="text-gray-500 text-sm">one-time</span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Shield size={14} />
-            <span>Secure payment via Stripe</span>
+            <span>Secure payment via Razorpay</span>
           </div>
         </motion.button>
       </div>
@@ -142,9 +147,17 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
           Back
         </button>
 
-        <p className="text-gray-500 text-sm text-right">
-          You'll be redirected to our secure payment provider
-        </p>
+        <button
+          onClick={async () => {
+            if (!selectedOption || isSubmitting) return;
+            setIsSubmitting(true);
+            await onSelectOption(selectedOption);
+          }}
+          disabled={!selectedOption || isSubmitting}
+          className="px-6 py-3 rounded-xl bg-orange-500 text-black font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-orange-400 transition-colors"
+        >
+          Continue to Payment
+        </button>
       </motion.div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { InterviewProvider, useInterview } from '../context/InterviewContext';
 import { CalibrationStep } from '../components/interview/CalibrationStep';
 import { QuestionCard } from '../components/interview/QuestionCard';
@@ -9,9 +9,15 @@ import { SpecificationReview } from '../components/interview/SpecificationReview
 import { TermsAcceptance } from '../components/interview/TermsAcceptance';
 import { PaymentOptions } from '../components/interview/PaymentOptions';
 import { OrderConfirmation } from '../components/interview/OrderConfirmation';
+import { useAuth } from '../context/AuthContext';
+import { persistOrder } from '../lib/persistence';
+import type { Order } from '../types/interview';
+import { createLbesOrderId, getPaymentAmounts, getPaymentLink, PaymentOption } from '../lib/payments';
 
 const InterviewContent: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user } = useAuth();
   const {
     state,
     currentQuestion,
@@ -23,8 +29,11 @@ const InterviewContent: React.FC = () => {
     setCurrentAnswer,
     currentAnswer,
     submitAnswer,
+    uploadChart,
     goBack,
     setCalibrationAnswer,
+    advanceCalibration,
+    goBackCalibration,
     completeCalibration,
     approveSpecification,
     editSection,
@@ -53,10 +62,10 @@ const InterviewContent: React.FC = () => {
 
   // Update stage when interview status changes
   useEffect(() => {
-    if (state.status === 'summary-generated' && stage === 'interview') {
+    if ((state.status === 'summary-generated' || state.status === 'interview-complete') && stage === 'interview' && specification) {
       setStage('review');
     }
-  }, [state.status, stage]);
+  }, [state.status, specification, stage]);
 
   const handleCalibrationSelect = (questionId: string, value: string | string[]) => {
     setCalibrationValues(prev => ({ ...prev, [questionId]: value }));
@@ -79,7 +88,7 @@ const InterviewContent: React.FC = () => {
 
     if (currentCalibrationIndex < calibrationQuestions.length - 1) {
       // Move to next calibration question
-      // The context will handle the index update
+      advanceCalibration();
     } else {
       // Last calibration question - complete calibration
       // Save all calibration values first
@@ -100,10 +109,36 @@ const InterviewContent: React.FC = () => {
     setStage('payment');
   };
 
-  const handleSelectPaymentOption = (option: 'booking' | 'full') => {
+  const handleSelectPaymentOption = async (option: PaymentOption) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    const orderId = createLbesOrderId();
+    const amounts = getPaymentAmounts(selectedPackage, option);
     setPaymentOption(option);
-    setOrderId(crypto.randomUUID());
-    setStage('confirmation');
+    setOrderId(orderId);
+    const order: Order = {
+      id: crypto.randomUUID(),
+      orderId,
+      interviewId: state.id,
+      packageId: selectedPackage,
+      status: 'payment-pending',
+      paymentOption: option,
+      packagePrice: amounts.packagePrice,
+      amountDueNow: amounts.amountDueNow,
+      paymentStatus: 'pending',
+      paymentConfirmed: false,
+      createdAt: new Date()
+    };
+    const saved = await persistOrder(order, user);
+    if (!saved) {
+      window.alert('We could not save your order. Please try again.');
+      return;
+    }
+    localStorage.setItem('lbes_pending_order_id', orderId);
+    window.location.assign(`${getPaymentLink(selectedPackage, option)}?order_id=${encodeURIComponent(orderId)}`);
   };
 
   const handleEditSection = (sectionId: string) => {
@@ -115,11 +150,10 @@ const InterviewContent: React.FC = () => {
     navigate('/specification');
   };
 
-  const selectedPackage = state.calibration?.platform === 'tradingview' 
-    ? 'tradingview' 
-    : state.calibration?.platform === 'mt5' 
-      ? 'tradingview-mt5' 
-      : 'tradingview-mt5';
+  const packageParam = searchParams.get('package');
+  const selectedPackage = packageParam === 'tradingview' || packageParam === 'tradingview-mt5' || packageParam === 'full'
+    ? packageParam
+    : state.answers.platform?.answer === 'tradingview' ? 'tradingview' : 'tradingview-mt5';
 
   const canGoBack = isCalibrating 
     ? currentCalibrationIndex > 0 
@@ -174,14 +208,7 @@ const InterviewContent: React.FC = () => {
                         onSelect={(value) => handleCalibrationSelect(currentCalibrationQuestion.id, value)}
                         onContinue={handleCalibrationContinue}
                         onBack={() => {
-                          if (currentCalibrationIndex > 0) {
-                            // Just update local state for previous question
-                            const prevQ = calibrationQuestions[currentCalibrationIndex - 1];
-                            setCalibrationValues(prev => ({
-                              ...prev,
-                              [currentCalibrationQuestion.id]: currentCalibrationQuestion.multiSelect ? [] : ''
-                            }));
-                          }
+                          goBackCalibration();
                         }}
                         canGoBack={currentCalibrationIndex > 0}
                         isLastStep={currentCalibrationIndex === calibrationQuestions.length - 1}
@@ -208,6 +235,7 @@ const InterviewContent: React.FC = () => {
                         experienceLevel={state.calibration?.experienceLevel || 'beginner'}
                         currentAnswer={currentAnswer}
                         onAnswerChange={setCurrentAnswer}
+                        onFileSelected={async (file) => setCurrentAnswer(await uploadChart(file))}
                         onSubmit={submitAnswer}
                         onBack={goBack}
                         canGoBack={canGoBack}

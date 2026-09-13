@@ -10,6 +10,7 @@ interface QuestionCardProps {
   experienceLevel: 'beginner' | 'intermediate' | 'advanced';
   currentAnswer: string;
   onAnswerChange: (answer: string) => void;
+  onFileSelected?: (file: File) => void | Promise<void>;
   onSubmit: () => void;
   onBack: () => void;
   canGoBack: boolean;
@@ -22,6 +23,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   experienceLevel,
   currentAnswer,
   onAnswerChange,
+  onFileSelected,
   onSubmit,
   onBack,
   canGoBack,
@@ -31,9 +33,23 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const isBeginner = experienceLevel === 'beginner';
   const answerLength = currentAnswer.trim().length;
   const isVague = answerLength > 0 && answerLength < 10;
+  const selectedOptions = currentAnswer.split(',').map(value => value.trim()).filter(Boolean);
+  const isTextarea = !question.answerType || question.answerType === 'textarea';
+  const customOptionSelected = selectedOptions.some(value => value === 'other' || value === 'custom');
+
+  const handleOptionClick = (value: string) => {
+    const nextOptions = question.multiSelect
+      ? selectedOptions.includes(value)
+        ? selectedOptions.filter(option => option !== value)
+        : [...selectedOptions, value]
+      : [value];
+
+    onAnswerChange(nextOptions.join(', '));
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && currentAnswer.trim()) {
+    if (e.key === 'Enter' && currentAnswer.trim() && (isTextarea ? (e.metaKey || e.ctrlKey) : true)) {
+      e.preventDefault();
       onSubmit();
     }
   };
@@ -70,13 +86,58 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         </div>
       )}
 
-      <textarea
-        value={currentAnswer}
-        onChange={(e) => onAnswerChange(e.target.value)}
-        placeholder={question.placeholder}
-        className="w-full h-32 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:bg-black/60 outline-none transition-all resize-none"
-        autoFocus
-      />
+      {question.answerType === 'file' ? (
+        <label className="block border border-dashed border-white/20 rounded-xl p-8 text-center cursor-pointer hover:border-orange-500/50 transition-colors">
+          <span className="text-gray-300">Upload a chart screenshot</span>
+          <input type="file" accept="image/*" className="sr-only" onChange={event => { const file = event.target.files?.[0]; if (file) void onFileSelected?.(file); }} />
+        </label>
+      ) : question.answerType === 'number' ? (
+        <input
+          type="number"
+          value={currentAnswer}
+          onChange={event => onAnswerChange(event.target.value)}
+          placeholder={question.placeholder}
+          className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:bg-black/60 outline-none transition-all"
+          autoFocus
+          onKeyDown={handleKeyDown}
+        />
+      ) : question.options ? (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {question.options.map(option => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => handleOptionClick(option.value)}
+              className={`min-h-14 rounded-xl border px-4 py-3 text-left font-medium transition-all ${
+                selectedOptions.includes(option.value)
+                  ? 'border-orange-500/60 bg-orange-500/10 text-white'
+                  : 'border-white/10 bg-black/40 text-gray-400 hover:border-white/30 hover:text-white'
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <textarea
+          value={currentAnswer}
+          onChange={(e) => onAnswerChange(e.target.value)}
+          placeholder={question.placeholder}
+          className="w-full h-32 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:bg-black/60 outline-none transition-all resize-none"
+          autoFocus
+          onKeyDown={handleKeyDown}
+        />
+      )}
+
+      {customOptionSelected && (
+        <input
+          value={selectedOptions.filter(value => value !== 'other' && value !== 'custom').join(', ')}
+          onChange={event => onAnswerChange(`${selectedOptions.filter(value => value === 'other' || value === 'custom').join(', ')}, ${event.target.value}`.replace(/^, /, ''))}
+          placeholder="Tell us which one or add details..."
+          className="mt-3 w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 outline-none focus:border-blue-500/50"
+          onKeyDown={handleKeyDown}
+        />
+      )}
 
       {isBeginner && question.helperText && (
         <p className="mt-2 text-sm text-gray-500">
@@ -126,7 +187,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         >
           <button
             onClick={onSubmit}
-            disabled={!currentAnswer.trim()}
+            disabled={question.optional ? false : !currentAnswer.trim()}
             className="px-8 py-3 bg-[#0F0F0F] text-white font-medium rounded-xl hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RollingText text="Continue" />

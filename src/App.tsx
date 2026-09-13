@@ -10,6 +10,10 @@ import { Specification } from './pages/Specification';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsConditions } from './pages/TermsConditions';
 import { NotFound } from './pages/NotFound';
+import { Auth } from './pages/Auth';
+import { AuthProvider } from './context/AuthContext';
+import { PaymentReturn } from './pages/PaymentReturn';
+import { OrderPage } from './pages/OrderPage';
 
 const ScrollToAnchor = () => {
   const { pathname, hash } = useLocation();
@@ -34,21 +38,32 @@ const ScrollToAnchor = () => {
 function App() {
   return (
     <Router>
-      <ScrollToAnchor />
-      <div className="min-h-screen bg-[#050505] text-white selection:bg-orange-500/30 font-sans overflow-x-hidden">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/examples" element={<Examples />} />
-          <Route path="/interview" element={<Interview />} />
-          <Route path="/specification" element={<Specification />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-conditions" element={<TermsConditions />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <ScrollToAnchor />
+        <div className="min-h-screen bg-[#050505] text-white selection:bg-orange-500/30 font-sans overflow-x-hidden">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/examples" element={<Examples />} />
+            <Route path="/interview" element={<Interview />} />
+            <Route path="/specification" element={<Specification />} />
+            <Route path="/login" element={<Auth mode="login" />} />
+            <Route path="/signup" element={<Auth mode="signup" />} />
+            <Route path="/forgot-password" element={<Auth mode="forgot" />} />
+            <Route path="/reset-password" element={<Auth mode="reset" />} />
+            <Route path="/payment-success" element={<PaymentReturn />} />
+            <Route path="/payment-cancelled" element={<PaymentReturn cancelled />} />
+            <Route path="/payment/success" element={<PaymentReturn />} />
+            <Route path="/payment/cancelled" element={<PaymentReturn cancelled />} />
+            <Route path="/order/:orderId" element={<OrderPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Footer />
+        </div>
+      </AuthProvider>
     </Router>
   );
 }

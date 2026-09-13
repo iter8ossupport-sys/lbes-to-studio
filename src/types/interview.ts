@@ -3,6 +3,7 @@ export type Platform = 'tradingview' | 'mt5' | 'tradingview-mt5';
 export type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced';
 export type StrategyMaturity = 'in-head' | 'partially-written' | 'fully-written' | 'already-implemented';
 export type StrategyType = 'trend-following' | 'breakout' | 'liquidity-sweep' | 'smart-money' | 'support-resistance' | 'price-action' | 'indicator-based' | 'pattern-based' | 'custom';
+export type QuestionAnswerType = 'single-select' | 'multi-select' | 'textarea' | 'number' | 'yes-no' | 'file';
 
 export type OrderStatus = 
   | 'package-selected'
@@ -36,11 +37,16 @@ export interface Question {
   section: InterviewSection;
   question: string;
   placeholder: string;
+  answerType?: QuestionAnswerType;
+  options?: { value: string; label: string }[];
+  multiSelect?: boolean;
+  optional?: boolean;
+  dependsOn?: { questionId: string; values: string[] };
+  followUpFor?: string;
   helperText?: string;
   whyWeAreAsking?: string;
   answerStructure?: string[];
   followUpCondition?: (answer: string) => boolean;
-  dependsOn?: string[];
   required: boolean;
   priority: number;
 }
@@ -104,10 +110,14 @@ export interface Package {
 
 export interface Order {
   id: string;
+  orderId?: string;
   interviewId: string;
   packageId: Package['id'];
   status: OrderStatus;
   paymentOption: 'booking' | 'full' | null;
+  packagePrice?: number;
+  amountDueNow?: number;
+  paymentStatus?: 'pending' | 'confirmed' | 'failed' | 'cancelled';
   paymentConfirmed: boolean;
   createdAt: Date;
   deliveryTarget?: Date;

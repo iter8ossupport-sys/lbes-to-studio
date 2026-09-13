@@ -8,6 +8,7 @@ import { cn } from '../lib/utils';
 
 const packages = [
   {
+    id: 'tradingview',
     name: 'TradingView Indicator',
     price: '$19',
     description: 'Turn my strategy into TradingView software.',
@@ -25,6 +26,7 @@ const packages = [
     highlight: false
   },
   {
+    id: 'tradingview-mt5',
     name: 'TradingView + MT5',
     price: '$29',
     description: 'Take my strategy from TradingView into MT5.',
@@ -38,6 +40,7 @@ const packages = [
     highlight: true
   },
   {
+    id: 'full',
     name: 'Full Engineering',
     price: '$49',
     description: 'Give my strategy the full engineering treatment.',
@@ -125,7 +128,7 @@ export const PricingSection = () => {
                     className="rounded-xl"
                   >
                     <Link
-                      to="/interview"
+                      to={`/interview?package=${pkg.id}`}
                       className="block w-full py-3 bg-[#0F0F0F] text-white font-medium rounded-xl hover:bg-black transition-colors text-center"
                     >
                       <RollingText text={pkg.cta} className="justify-center" />
@@ -133,7 +136,7 @@ export const PricingSection = () => {
                   </GradientBorder>
                 ) : (
                   <Link
-                    to="/interview"
+                    to={`/interview?package=${pkg.id}`}
                     className="block w-full py-3 rounded-xl border border-white/20 bg-white/5 text-white font-medium hover:bg-white/10 transition-colors text-center"
                   >
                     <RollingText text={pkg.cta} className="justify-center" />

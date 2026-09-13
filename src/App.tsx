@@ -12,6 +12,7 @@ import { TermsConditions } from './pages/TermsConditions';
 import { NotFound } from './pages/NotFound';
 import { Auth } from './pages/Auth';
 import { AuthProvider } from './context/AuthContext';
+import { InterviewProvider } from './context/InterviewContext';
 import { PaymentReturn } from './pages/PaymentReturn';
 import { OrderPage } from './pages/OrderPage';
 

@@ -47,7 +47,7 @@ function App() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/examples" element={<Examples />} />
             <Route path="/interview" element={<Interview />} />
-            <Route path="/specification" element={<Specification />} />
+            <Route path="/specification" element={<InterviewProvider><Specification /></InterviewProvider>} />
             <Route path="/login" element={<Auth mode="login" />} />
             <Route path="/signup" element={<Auth mode="signup" />} />
             <Route path="/forgot-password" element={<Auth mode="forgot" />} />

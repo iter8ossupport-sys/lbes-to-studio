@@ -34,7 +34,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const answerLength = currentAnswer.trim().length;
   const isVague = answerLength > 0 && answerLength < 10;
   const selectedOptions = currentAnswer.split(',').map(value => value.trim()).filter(Boolean);
-  const isTextarea = !question.answerType || question.answerType === 'textarea';
   const customOptionSelected = selectedOptions.some(value => value === 'other' || value === 'custom');
 
   const handleOptionClick = (value: string) => {
@@ -48,7 +47,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && currentAnswer.trim() && (isTextarea ? (e.metaKey || e.ctrlKey) : true)) {
+    if (e.key === 'Enter' && currentAnswer.trim()) {
       e.preventDefault();
       onSubmit();
     }
@@ -139,6 +138,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         />
       )}
 
+      {question.required && !currentAnswer.trim() && (
+        <p className="mt-3 text-sm text-red-400">Please fill this required answer before continuing.</p>
+      )}
+
       {isBeginner && question.helperText && (
         <p className="mt-2 text-sm text-gray-500">
           Example: {question.helperText}
@@ -197,7 +200,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       </div>
 
       <p className="text-center text-gray-600 text-xs mt-4">
-        Press <kbd className="px-2 py-1 bg-gray-800 rounded text-gray-400">⌘ + Enter</kbd> to submit
+        Press <kbd className="px-2 py-1 bg-gray-800 rounded text-gray-400">Enter</kbd> to continue
       </p>
     </motion.div>
   );

@@ -190,7 +190,7 @@ begin
     new.user_id = auth.uid();
     new.customer_id = auth.uid();
   end if;
-  if tg_op = 'UPDATE' then
+  if auth.uid() is not null and tg_op = 'UPDATE' then
     new.order_id = old.order_id;
     new.package_id = old.package_id;
     new.package_price = old.package_price;

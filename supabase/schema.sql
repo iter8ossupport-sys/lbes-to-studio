@@ -180,14 +180,16 @@ security invoker
 set search_path = public
 as $$
 begin
-  if not exists (
+  if auth.uid() is not null and not exists (
     select 1 from public.interviews i
     where i.id = new.interview_id and i.user_id = auth.uid()
   ) then
     raise exception 'Interview does not belong to the signed-in user';
   end if;
-  new.user_id = auth.uid();
-  new.customer_id = auth.uid();
+  if auth.uid() is not null then
+    new.user_id = auth.uid();
+    new.customer_id = auth.uid();
+  end if;
   if tg_op = 'UPDATE' then
     new.order_id = old.order_id;
     new.package_id = old.package_id;

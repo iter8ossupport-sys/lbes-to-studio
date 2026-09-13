@@ -10,7 +10,7 @@ import { TermsAcceptance } from '../components/interview/TermsAcceptance';
 import { PaymentOptions } from '../components/interview/PaymentOptions';
 import { OrderConfirmation } from '../components/interview/OrderConfirmation';
 import { useAuth } from '../context/AuthContext';
-import { persistOrder } from '../lib/persistence';
+import { persistInterviewSnapshot, persistOrder } from '../lib/persistence';
 import type { Order } from '../types/interview';
 import { createLbesOrderId, getPaymentAmounts, getPaymentLink, PaymentOption } from '../lib/payments';
 
@@ -132,9 +132,15 @@ const InterviewContent: React.FC = () => {
       paymentConfirmed: false,
       createdAt: new Date()
     };
+    const interviewSaved = await persistInterviewSnapshot(state, specification, user);
+    if (!interviewSaved.saved) {
+      window.alert(`We could not save your interview: ${interviewSaved.error}`);
+      return;
+    }
+
     const saved = await persistOrder(order, user);
-    if (!saved) {
-      window.alert('We could not save your order. Please try again.');
+    if (!saved.saved) {
+      window.alert(`We could not save your order: ${saved.error}`);
       return;
     }
     localStorage.setItem('lbes_pending_order_id', orderId);

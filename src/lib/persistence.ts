@@ -7,7 +7,7 @@ export const persistInterviewSnapshot = async (
   specification: StrategySpecification | null,
   user: User | null
 ) => {
-  if (!supabase || !user || !state.calibration) return;
+  if (!supabase || !user || !state.calibration) return { saved: false, error: 'You must be signed in before saving an order.' };
 
   const { error: interviewError } = await supabase.from('interviews').upsert({
     id: state.id,
@@ -26,7 +26,7 @@ export const persistInterviewSnapshot = async (
 
   if (interviewError) {
     console.error('Unable to save interview:', interviewError.message);
-    return;
+    return { saved: false, error: interviewError.message };
   }
 
   const answerRows = Object.values(state.answers).map(answer => ({
@@ -44,7 +44,10 @@ export const persistInterviewSnapshot = async (
       .from('interview_answers')
       .upsert(answerRows, { onConflict: 'interview_id,question_id' });
 
-    if (answersError) console.error('Unable to save interview answers:', answersError.message);
+    if (answersError) {
+      console.error('Unable to save interview answers:', answersError.message);
+      return { saved: false, error: answersError.message };
+    }
   }
 
   if (specification) {
@@ -58,12 +61,17 @@ export const persistInterviewSnapshot = async (
       approved_at: specification.approvedAt || null
     });
 
-    if (specificationError) console.error('Unable to save specification:', specificationError.message);
+    if (specificationError) {
+      console.error('Unable to save specification:', specificationError.message);
+      return { saved: false, error: specificationError.message };
+    }
   }
+
+  return { saved: true, error: null };
 };
 
 export const persistOrder = async (order: Order, user: User | null) => {
-  if (!supabase || !user) return false;
+  if (!supabase || !user) return { saved: false, error: 'You must be signed in before saving an order.' };
 
   const { error } = await supabase.from('orders').insert({
     id: order.id,
@@ -85,7 +93,7 @@ export const persistOrder = async (order: Order, user: User | null) => {
 
   if (error) {
     console.error('Unable to save order:', error.message);
-    return false;
+    return { saved: false, error: error.message };
   }
-  return true;
+  return { saved: true, error: null };
 };

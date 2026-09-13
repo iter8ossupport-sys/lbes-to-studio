@@ -73,22 +73,14 @@ export const persistInterviewSnapshot = async (
 export const persistOrder = async (order: Order, user: User | null) => {
   if (!supabase || !user) return { saved: false, error: 'You must be signed in before saving an order.' };
 
-  const { error } = await supabase.from('orders').insert({
-    id: order.id,
-    order_id: order.orderId || order.id,
-    user_id: user.id,
-    interview_id: order.interviewId,
-     customer_id: user.id,
-     strategy_id: order.interviewId,
-    package_id: order.packageId,
-    package_price: order.packagePrice,
-    amount_due_now: order.amountDueNow,
-    status: order.status,
-    payment_option: order.paymentOption,
-    payment_type: order.paymentOption,
-    payment_status: order.paymentStatus || 'pending',
-    payment_confirmed: order.paymentConfirmed,
-    created_at: order.createdAt
+  const { error } = await supabase.rpc('create_pending_order', {
+    p_id: order.id,
+    p_order_id: order.orderId || order.id,
+    p_interview_id: order.interviewId,
+    p_package_id: order.packageId,
+    p_payment_option: order.paymentOption,
+    p_package_price: order.packagePrice,
+    p_amount_due_now: order.amountDueNow
   });
 
   if (error) {

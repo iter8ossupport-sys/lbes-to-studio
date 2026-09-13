@@ -111,12 +111,25 @@ $$;
 drop trigger if exists profiles_updated_at on public.profiles;
 create trigger profiles_updated_at before update on public.profiles
 for each row execute function public.set_updated_at();
-drop trigger if exists interviews_updated_at on public.interviews;
-create trigger interviews_updated_at before update on public.interviews
-for each row execute function public.set_updated_at();
 drop trigger if exists orders_updated_at on public.orders;
 create trigger orders_updated_at before update on public.orders
 for each row execute function public.set_updated_at();
+
+create or replace function public.set_interview_last_updated()
+returns trigger
+language plpgsql
+security invoker
+set search_path = public
+as $$
+begin
+  new.last_updated = now();
+  return new;
+end;
+$$;
+
+drop trigger if exists interviews_updated_at on public.interviews;
+create trigger interviews_updated_at before update on public.interviews
+for each row execute function public.set_interview_last_updated();
 
 create or replace function public.handle_new_user()
 returns trigger
@@ -244,14 +257,60 @@ create policy specifications_insert_own on public.specifications for insert to a
 create policy specifications_update_own on public.specifications for update to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
 
 create policy orders_select_own on public.orders for select to authenticated using (user_id = auth.uid());
-create policy orders_insert_own on public.orders for insert to authenticated with check (user_id = auth.uid() and status = 'payment-pending' and payment_confirmed = false);
+-- Pending orders are created through the validated RPC below, not direct browser inserts.
 
 revoke all on public.profiles, public.interviews, public.interview_answers, public.specifications, public.orders from anon;
 grant select, update on public.profiles to authenticated;
 grant select, insert, update, delete on public.interviews to authenticated;
 grant select, insert, update, delete on public.interview_answers to authenticated;
 grant select, insert, update on public.specifications to authenticated;
-grant select, insert on public.orders to authenticated;
+grant select on public.orders to authenticated;
+
+create or replace function public.create_pending_order(
+  p_id uuid,
+  p_order_id text,
+  p_interview_id uuid,
+  p_package_id text,
+  p_payment_option text,
+  p_package_price numeric,
+  p_amount_due_now numeric
+)
+returns public.orders
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  created_order public.orders;
+  expected_price numeric;
+  expected_amount numeric;
+begin
+  if auth.uid() is null then
+    raise exception 'You must be signed in';
+  end if;
+
+  if not exists (select 1 from public.interviews where id = p_interview_id and user_id = auth.uid()) then
+    raise exception 'Interview does not belong to the signed-in user';
+  end if;
+
+  expected_price := case p_package_id when 'tradingview' then 19 when 'tradingview-mt5' then 29 when 'full' then 49 else null end;
+  if expected_price is null or p_payment_option not in ('booking', 'full') then
+    raise exception 'Invalid package or payment option';
+  end if;
+  expected_amount := case when p_payment_option = 'booking' then expected_price * 0.05 else expected_price end;
+  if p_package_price <> expected_price or p_amount_due_now <> expected_amount then
+    raise exception 'Invalid payment amount';
+  end if;
+
+  insert into public.orders (id, order_id, user_id, customer_id, interview_id, strategy_id, package_id, package_price, amount_due_now, status, payment_option, payment_type, payment_status, payment_confirmed, payment_provider)
+  values (p_id, p_order_id, auth.uid(), auth.uid(), p_interview_id, p_interview_id, p_package_id, expected_price, expected_amount, 'payment-pending', p_payment_option, p_payment_option, 'pending', false, 'razorpay')
+  returning * into created_order;
+  return created_order;
+end;
+$$;
+
+revoke all on function public.create_pending_order(uuid, text, uuid, text, text, numeric, numeric) from public;
+grant execute on function public.create_pending_order(uuid, text, uuid, text, text, numeric, numeric) to authenticated;
 
 create policy chart_uploads_select_own on storage.objects for select to authenticated
 using (bucket_id = 'chart-uploads' and (storage.foldername(name))[1] = auth.uid()::text);

@@ -51,30 +51,14 @@ export const persistInterviewSnapshot = async (
   }
 
   if (specification) {
-    const specificationRow = {
-      id: specification.id,
-      interview_id: state.id,
-      user_id: user.id,
-      sections: specification.sections,
-      approved: specification.approved,
-      generated_at: specification.generatedAt,
-      approved_at: specification.approvedAt || null
-    };
-
-    const { data: existingSpecification, error: lookupError } = await supabase
-      .from('specifications')
-      .select('id')
-      .eq('interview_id', state.id)
-      .maybeSingle();
-
-    if (lookupError) {
-      console.error('Unable to find specification:', lookupError.message);
-      return { saved: false, error: lookupError.message };
-    }
-
-    const specificationError = existingSpecification
-      ? (await supabase.from('specifications').update(specificationRow).eq('id', existingSpecification.id)).error
-      : (await supabase.from('specifications').insert(specificationRow)).error;
+    const { error: specificationError } = await supabase.rpc('save_specification', {
+      p_id: specification.id,
+      p_interview_id: state.id,
+      p_sections: specification.sections,
+      p_approved: specification.approved,
+      p_generated_at: specification.generatedAt,
+      p_approved_at: specification.approvedAt || null
+    });
 
     if (specificationError) {
       console.error('Unable to save specification:', specificationError.message);

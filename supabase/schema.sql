@@ -312,6 +312,45 @@ $$;
 revoke all on function public.create_pending_order(uuid, text, uuid, text, text, numeric, numeric) from public;
 grant execute on function public.create_pending_order(uuid, text, uuid, text, text, numeric, numeric) to authenticated;
 
+create or replace function public.save_specification(
+  p_id uuid,
+  p_interview_id uuid,
+  p_sections jsonb,
+  p_approved boolean,
+  p_generated_at timestamptz,
+  p_approved_at timestamptz
+)
+returns public.specifications
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  saved_specification public.specifications;
+begin
+  if auth.uid() is null then
+    raise exception 'You must be signed in';
+  end if;
+  if not exists (select 1 from public.interviews where id = p_interview_id and user_id = auth.uid()) then
+    raise exception 'Interview does not belong to the signed-in user';
+  end if;
+
+  insert into public.specifications (id, interview_id, user_id, sections, approved, generated_at, approved_at)
+  values (p_id, p_interview_id, auth.uid(), p_sections, p_approved, p_generated_at, p_approved_at)
+  on conflict (interview_id) do update set
+    user_id = excluded.user_id,
+    sections = excluded.sections,
+    approved = excluded.approved,
+    generated_at = excluded.generated_at,
+    approved_at = excluded.approved_at
+  returning * into saved_specification;
+  return saved_specification;
+end;
+$$;
+
+revoke all on function public.save_specification(uuid, uuid, jsonb, boolean, timestamptz, timestamptz) from public;
+grant execute on function public.save_specification(uuid, uuid, jsonb, boolean, timestamptz, timestamptz) to authenticated;
+
 create policy chart_uploads_select_own on storage.objects for select to authenticated
 using (bucket_id = 'chart-uploads' and (storage.foldername(name))[1] = auth.uid()::text);
 create policy chart_uploads_insert_own on storage.objects for insert to authenticated

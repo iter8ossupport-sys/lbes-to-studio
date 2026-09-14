@@ -88,3 +88,38 @@ export const persistOrder = async (order: Order, user: User | null) => {
   }
   return { saved: true, error: null };
 };
+
+export const confirmOrderPayment = async (orderId: string, user: User | null) => {
+  if (!supabase || !orderId) return { success: false, error: 'Order ID or client missing' };
+
+  // First try direct table update (or RPC)
+  const { error: updateError } = await supabase
+    .from('orders')
+    .update({
+      payment_status: 'confirmed',
+      payment_confirmed: true,
+      status: 'engineering-queued',
+      updated_at: new Date().toISOString()
+    })
+    .eq('order_id', orderId);
+
+  if (updateError) {
+    // Fall back to RPC
+    await supabase.rpc('confirm_order_payment', { p_order_id: orderId });
+  }
+
+  return { success: true, error: null };
+};
+
+export const getActiveUserOrder = async (user: User | null) => {
+  if (!supabase || !user) return null;
+  const { data } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  return data;
+};

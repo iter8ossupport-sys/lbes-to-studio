@@ -165,21 +165,26 @@ const InterviewContent: React.FC = () => {
     ? currentCalibrationIndex > 0 
     : state.currentQuestionIndex > 0;
 
+  // Auto scroll to top when stage changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [stage]);
+
   const currentCalibrationQuestion = calibrationQuestions[currentCalibrationIndex];
   const currentCalibrationValue = calibrationValues[currentCalibrationQuestion?.id] ?? (currentCalibrationQuestion?.multiSelect ? [] : '');
 
   return (
-    <div className="relative w-full min-h-screen pt-32 bg-[#050505] overflow-x-hidden">
+    <div className="relative w-full min-h-screen pt-32 pb-24 bg-[#050505] overflow-x-hidden">
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-0 w-[60vw] h-[60vw] bg-orange-600/10 blur-[120px] rounded-full opacity-40" />
         <div className="absolute top-0 right-0 w-[60vw] h-[60vw] bg-blue-600/10 blur-[120px] rounded-full opacity-40" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <AnimatePresence mode="wait">
-              {stage === 'interview' && (
+        {stage === 'interview' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <AnimatePresence mode="wait">
                 <motion.div
                   key="interview"
                   initial={{ opacity: 0 }}
@@ -264,13 +269,27 @@ const InterviewContent: React.FC = () => {
                     </div>
                   )}
                 </motion.div>
-              )}
+              </AnimatePresence>
+            </div>
 
+            <div className="lg:col-span-1">
+              <BlueprintPanel
+                sections={['trading-foundation', 'strategy-discovery', 'entry-logic', 'trade-management', 'risk-filters', 'engineering-check']}
+                getSectionStatus={getSectionStatus}
+                currentSection={state.currentSection}
+                readiness={getReadinessPercentage()}
+                selectedPackage={selectedPackage}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="max-w-4xl mx-auto w-full">
+            <AnimatePresence mode="wait">
               {stage === 'review' && specification && (
                 <motion.div
                   key="review"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                 >
                   <SpecificationReview
@@ -284,8 +303,8 @@ const InterviewContent: React.FC = () => {
               {stage === 'terms' && (
                 <motion.div
                   key="terms"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                 >
                   <TermsAcceptance
@@ -298,8 +317,8 @@ const InterviewContent: React.FC = () => {
               {stage === 'payment' && (
                 <motion.div
                   key="payment"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                 >
                   <PaymentOptions
@@ -313,8 +332,8 @@ const InterviewContent: React.FC = () => {
               {stage === 'confirmation' && (
                 <motion.div
                   key="confirmation"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                 >
                   <OrderConfirmation
@@ -327,19 +346,7 @@ const InterviewContent: React.FC = () => {
               )}
             </AnimatePresence>
           </div>
-
-          <div className="lg:col-span-1">
-            {stage === 'interview' && (
-              <BlueprintPanel
-                sections={['trading-foundation', 'strategy-discovery', 'entry-logic', 'trade-management', 'risk-filters', 'engineering-check']}
-                getSectionStatus={getSectionStatus}
-                currentSection={state.currentSection}
-                readiness={getReadinessPercentage()}
-                selectedPackage={selectedPackage}
-              />
-            )}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

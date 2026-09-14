@@ -3,6 +3,7 @@ import { GradientBorder } from "./ui/GradientBorder";
 import { RollingText } from "./ui/RollingText";
 import { motion } from "framer-motion";
 import { ArrowDown, MessageSquare, FileCode, CheckCircle } from "lucide-react";
+import { TrustLogos } from "./TrustLogos";
 
 export const Hero = () => {
   return (
@@ -34,10 +35,15 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-[1.1] mb-6 max-w-4xl drop-shadow-2xl text-center"
+          className="text-[clamp(42px,10vw,54px)] md:text-[clamp(48px,6.5vw,68px)] lg:text-[clamp(56px,5.5vw,84px)] font-bold tracking-[-0.045em] leading-[1.0] mb-6 max-w-4xl text-center drop-shadow-[0_10px_35px_rgba(59,130,246,0.25)]"
         >
-          Your strategy is in your head. <br />
-          Let's make it clear.
+          <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-slate-100 to-blue-200/80">
+            Your strategy is in your head
+          </span>
+          <br />
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-orange-300">
+            Let's make it clear
+          </span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -156,6 +162,10 @@ export const Hero = () => {
             </div>
           </div>
         </motion.div>
+      </div>
+
+      <div className="w-full mt-16 relative z-20">
+        <TrustLogos />
       </div>
     </div>
   );

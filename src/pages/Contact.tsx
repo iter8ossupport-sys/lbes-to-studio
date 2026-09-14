@@ -204,9 +204,6 @@ export const Contact = () => {
 
       {/* --- TRUST SECTION --- */}
       <div className="relative z-10 mb-24">
-        <div className="text-center mb-8">
-          <p className="text-sm font-medium text-white">Trusted by 150,000+ users worldwide</p>
-        </div>
         <TrustLogos />
       </div>
 

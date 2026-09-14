@@ -4,6 +4,7 @@ import { RollingText } from "./ui/RollingText";
 import { motion } from "framer-motion";
 import { ArrowDown, MessageSquare, FileCode, CheckCircle } from "lucide-react";
 import { TrustLogos } from "./TrustLogos";
+import { HeroVideoDemo } from "./HeroVideoDemo";
 
 export const Hero = () => {
   return (
@@ -161,6 +162,16 @@ export const Hero = () => {
               </div>
             </div>
           </div>
+        </motion.div>
+
+        {/* Product Demo Video — below the 3-step flow */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+          className="w-full"
+        >
+          <HeroVideoDemo />
         </motion.div>
       </div>
 

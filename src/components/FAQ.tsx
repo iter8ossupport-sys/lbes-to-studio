@@ -5,26 +5,27 @@ import { RollingText } from "./ui/RollingText";
 
 const faqs = [
   {
-    question: "Which apps can I integrate?",
+    question: "How quickly will I receive my software?",
     answer:
-      "Converge AI supports 50+ integrations, including Slack, HubSpot, Zendesk, Salesforce, Google Workspace, WhatsApp, Zapier, and more.",
+      "Most strategies are engineered and delivered within 3–5 business days of your specification being approved. Complex or multi-pair requests may take slightly longer — we'll confirm the timeline before starting.",
   },
   {
-    question: "How does Converge AI automate tasks?",
+    question: "What if I want to change my strategy after submission?",
     answer:
-      "Converge AI connects your existing tools and uses intelligent agents to listen for triggers (like a new email or form submission) and execute multi-step workflows automatically.",
+      "You review and approve the full strategy specification before any engineering begins. If you want to refine it before approval, you can. Changes requested after engineering has started may require a new submission.",
   },
   {
-    question: "Is my data secure with Converge AI?",
+    question: "Which platforms do you build for?",
     answer:
-      "Yes, we prioritize security. All data is encrypted at rest and in transit, and we are SOC2 Type II compliant to ensure your information remains protected.",
+      "We build TradingView Pine Script indicators and MT5 Expert Advisors (algorithms). The package you choose determines which platforms are included.",
   },
   {
-    question: "What kind of support do you offer?",
+    question: "Do you offer refunds?",
     answer:
-      "We offer 24/7 priority support for all enterprise plans, along with a comprehensive knowledge base and community forum for all users.",
+      "Because each strategy specification and software build is custom-engineered to your rules, we do not offer refunds once engineering has begun. Please review your specification carefully before approving it.",
   },
 ];
+
 
 export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);

@@ -4,44 +4,40 @@ import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
-    question: "What do I need before starting?",
-    answer: "You need a trading strategy — even if it's not fully defined. It can exist in your head, in notes, on charts, or as a rough set of rules. LBES helps you extract and structure it."
+    question: "Will LBES guarantee that my strategy is profitable?",
+    answer: "No. LBES engineers and tests the rules you provide. Historical testing is evidence about historical behavior, not a guarantee of future performance."
   },
   {
     question: "Do I need coding knowledge?",
-    answer: "No. You explain your strategy in plain language. LBES handles the technical translation. You review what we understood before anything is engineered."
+    answer: "No. The strategy interview is designed so you can explain your strategy in your own words."
+  },
+  {
+    question: "What is T→T?",
+    answer: "T→T means Trader-to-Trader Learning Support. You can ask educational questions about your LBES specification, implementation and testing evidence."
+  },
+  {
+    question: "Can T→T tell me what trades to take?",
+    answer: "No. T→T is educational support and does not provide trade signals or personalized investment recommendations."
+  },
+  {
+    question: "What if my backtest isn't good?",
+    answer: "The test reports what your defined rules showed under the specified historical conditions. A weak result is useful evidence about the current specification; it is not presented as a promise of profitability."
+  },
+  {
+    question: "What do I need before starting?",
+    answer: "You need a trading strategy — even if it's not fully defined. It can exist in your head, in notes, on charts, or as a rough set of rules. LBES helps you extract and structure it."
   },
   {
     question: "How does the interview work?",
     answer: "The interview adapts to your experience and strategy depth. It asks questions based on what you've already told it, identifying missing information and clarifying ambiguity as you go."
   },
   {
-    question: "Can I explain my strategy in plain English?",
-    answer: "Yes. There are no technical terms you need to know. Explain things the way you normally would. If something is unclear, LBES will ask follow-up questions."
-  },
-  {
-    question: "What happens after I approve the summary?",
-    answer: "Your strategy moves into engineering based on the package you selected. You can track the status of your order from your dashboard."
-  },
-  {
     question: "What is included in each package?",
-    answer: "TradingView Indicator ($19) includes the indicator, 6-month backtest, 5+ pairs, and multiple timeframes. TradingView + MT5 ($29) adds MT5 implementation and 1-year backtest. Full Engineering ($49) includes 10+ pairs, broader testing, and VPS guidance."
-  },
-  {
-    question: "What platforms are supported?",
-    answer: "TradingView and MetaTrader 5 (MT5). The TradingView package delivers a Pine Script indicator. The MT5 packages include both TradingView and MT5 implementations."
-  },
-  {
-    question: "How long does delivery take?",
-    answer: "TradingView Indicator targets 24–48 hours. TradingView + MT5 targets 48–72 hours. Full Engineering timing depends on scope and will be communicated during booking."
+    answer: "TradingView Indicator ($19) includes indicator + 6-month backtest. TradingView + MT5 ($29) adds MT5 algorithm & source code + 1-year backtest. Full Engineering ($49) includes 10+ pairs, 5+ timeframes, broader historical testing, and 30-day T→T support."
   },
   {
     question: "Can I review my strategy before engineering?",
-    answer: "Yes. You always review and approve the strategy summary before any engineering begins. You can edit answers if something doesn't look right."
-  },
-  {
-    question: "What are the limitations of backtesting?",
-    answer: "Backtesting shows how your strategy would have performed on historical data. It is not a guarantee of future performance. Results depend on data quality, execution assumptions, and market conditions."
+    answer: "Yes. You always review and approve the strategy specification before any engineering begins."
   }
 ];
 

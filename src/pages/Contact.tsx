@@ -46,11 +46,11 @@ export const Contact = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6 mb-24">
         
         {/* --- HERO SECTION --- */}
-        <div className="flex flex-col items-center text-center mb-12">
+        <div className="flex flex-col items-center text-center mb-14">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white tracking-tight mb-4"
+            className="text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] font-semibold text-white tracking-[-0.03em] mb-5"
           >
             Chat with the team
           </motion.h1>
@@ -59,28 +59,28 @@ export const Contact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed"
+            className="text-[15px] md:text-base text-gray-400 max-w-xl mx-auto leading-7"
           >
             Have a question about your strategy interview, specification, order, or delivery? Reach the LBES support team directly.
           </motion.p>
         </div>
 
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-          <a href="mailto:lbes.support@gmail.com" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-orange-500/40 transition-colors">
-            <Mail size={19} className="text-orange-400" />
-            <span className="text-sm break-all">lbes.support@gmail.com</span>
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          <a href="mailto:lbes.support@gmail.com" className="group flex items-center gap-3.5 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3.5 text-gray-300 hover:text-white hover:border-orange-400/50 hover:bg-white/[0.05] transition-all">
+            <Mail size={18} className="shrink-0 text-orange-300 group-hover:text-orange-200" />
+            <span className="text-[13px] font-medium tracking-[-0.01em] break-all">lbes.support@gmail.com</span>
           </a>
-          <a href="https://whatsapp.com/channel/0029VbASdkj90x2rc9CPHM27" target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-green-500/40 transition-colors">
-            <MessageCircle size={19} className="text-green-400" />
-            <span className="text-sm">WhatsApp Channel</span>
+          <a href="https://whatsapp.com/channel/0029VbASdkj90x2rc9CPHM27" target="_blank" rel="noreferrer" className="group flex items-center gap-3.5 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3.5 text-gray-300 hover:text-white hover:border-emerald-400/50 hover:bg-white/[0.05] transition-all">
+            <MessageCircle size={18} className="shrink-0 text-emerald-300 group-hover:text-emerald-200" />
+            <span className="text-[13px] font-medium tracking-[-0.01em]">WhatsApp Channel</span>
           </a>
-          <a href="https://x.com/yash0to1" target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-white/40 transition-colors">
-            <Twitter size={19} className="text-white" />
-            <span className="text-sm">X / @yash0to1</span>
+          <a href="https://x.com/yash0to1" target="_blank" rel="noreferrer" className="group flex items-center gap-3.5 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3.5 text-gray-300 hover:text-white hover:border-white/40 hover:bg-white/[0.05] transition-all">
+            <Twitter size={18} className="shrink-0 text-gray-200 group-hover:text-white" />
+            <span className="text-[13px] font-medium tracking-[-0.01em]">X / @yash0to1</span>
           </a>
-          <a href="https://www.linkedin.com/in/yash-tyagi-089a49345/" target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-gray-300 hover:text-white hover:border-blue-500/40 transition-colors">
-            <Linkedin size={19} className="text-blue-400" />
-            <span className="text-sm">LinkedIn</span>
+          <a href="https://www.linkedin.com/in/yash-tyagi-089a49345/" target="_blank" rel="noreferrer" className="group flex items-center gap-3.5 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3.5 text-gray-300 hover:text-white hover:border-sky-400/50 hover:bg-white/[0.05] transition-all">
+            <Linkedin size={18} className="shrink-0 text-sky-300 group-hover:text-sky-200" />
+            <span className="text-[13px] font-medium tracking-[-0.01em]">LinkedIn</span>
           </a>
         </div>
 

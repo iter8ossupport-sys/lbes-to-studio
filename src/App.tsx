@@ -53,6 +53,7 @@ function App() {
             <Route path="/interview" element={<Interview />} />
             <Route path="/specification" element={<InterviewProvider><Specification /></InterviewProvider>} />
             <Route path="/login" element={<Auth mode="login" />} />
+            <Route path="/auth/callback" element={<Auth mode="login" />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/signup" element={<Auth mode="signup" />} />
             <Route path="/forgot-password" element={<Auth mode="forgot" />} />

@@ -28,8 +28,39 @@ export const Auth: React.FC<AuthProps> = ({ mode }) => {
   const copy = COPY[mode];
 
   useEffect(() => {
-    if (mode === 'login' && user) navigate('/interview', { replace: true });
-  }, [mode, navigate, user]);
+    const hash = window.location.hash;
+    const search = window.location.search;
+
+    const parseParams = (str: string) => {
+      const cleaned = str.startsWith('#') || str.startsWith('?') ? str.substring(1) : str;
+      return new URLSearchParams(cleaned);
+    };
+
+    const hashParams = parseParams(hash);
+    const searchParams = parseParams(search);
+
+    const errorDescription = hashParams.get('error_description') || searchParams.get('error_description');
+    const errorMsg = hashParams.get('error') || searchParams.get('error');
+    const type = hashParams.get('type') || searchParams.get('type');
+
+    if (errorDescription || errorMsg) {
+      const decoded = decodeURIComponent(errorDescription || errorMsg || '');
+      setError(decoded.replace(/\+/g, ' '));
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (type === 'signup' || searchParams.has('code')) {
+      setMessage('Email verified successfully! Welcome to your workspace.');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mode === 'login' && user) {
+      const timeout = setTimeout(() => {
+        navigate('/interview', { replace: true });
+      }, message ? 1500 : 0);
+      return () => clearTimeout(timeout);
+    }
+  }, [mode, navigate, user, message]);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();

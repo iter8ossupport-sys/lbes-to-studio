@@ -11,16 +11,16 @@ const packages = [
     id: 'tradingview',
     name: 'TradingView Indicator',
     price: '$19',
-    description: 'Turn my strategy into TradingView software.',
+    description: 'Strategy → TradingView',
     features: [
       'Adaptive strategy interview',
-      'AI interview assistance',
-      'Strategy summary',
+      'Strategy specification',
       'TradingView indicator',
-      '6-month backtest',
-      '5+ pairs',
-      'Multiple timeframes',
-      '24–48 hour delivery target'
+      'Source/deliverable',
+      '6-month historical backtest',
+      '2+ pairs',
+      'Relevant timeframe testing',
+      'T→T: 1 focused educational Q&A'
     ],
     cta: 'Build My Indicator',
     highlight: false
@@ -29,12 +29,15 @@ const packages = [
     id: 'tradingview-mt5',
     name: 'TradingView + MT5',
     price: '$29',
-    description: 'Take my strategy from TradingView into MT5.',
+    description: 'Strategy → TradingView + MT5',
     features: [
-      'Everything in TradingView Indicator',
-      'MT5 implementation',
-      'MT5 source/code deliverable',
-      '1-year backtest'
+      'Everything in $19, plus:',
+      'MT5 algorithm + source code, ready for deployment',
+      'Source code deliverable',
+      '1-year historical backtest',
+      '5+ pairs',
+      '2+ timeframes',
+      'T→T: 1 focused educational Q&A'
     ],
     cta: 'Build My System',
     highlight: true
@@ -43,14 +46,16 @@ const packages = [
     id: 'full',
     name: 'Full Engineering',
     price: '$49',
-    description: 'Give my strategy the full engineering treatment.',
+    description: 'Strategy → Full Engineering',
     features: [
-      'Everything in TradingView + MT5',
+      'Everything in $29, plus:',
       '10+ pairs',
-      '2+ timeframes per pair',
-      'Broader backtesting package',
-      'Complete MT5 engineering deliverables',
-      'VPS setup guidance'
+      '5+ timeframes',
+      'Broader historical testing, subject to available data',
+      'MT5 implementation & source code',
+      'Implementation guidance',
+      'VPS setup guidance',
+      '30-day T→T educational support'
     ],
     cta: 'Start Full Engineering',
     highlight: false

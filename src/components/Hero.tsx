@@ -45,9 +45,9 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-400 text-lg md:text-xl max-w-2xl leading-relaxed mb-10 font-light text-center"
+          className="text-gray-400 text-lg md:text-xl max-w-3xl leading-relaxed mb-10 font-light text-center"
         >
-          Explain your strategy in your own words. LBES asks the right questions based on your experience and strategy depth, then turns what you mean into the software package you choose.
+          AI can write code. The harder part is making sure the code represents what you actually mean. LBES starts with understanding your strategy, asking the right questions, and turning your rules into verified software.
         </motion.p>
 
         {/* CTA Buttons */}

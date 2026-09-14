@@ -48,10 +48,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string) => {
     if (!supabase) return { error: configurationError };
+    const redirectUrl = `${window.location.origin}/login`;
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/login` }
+      options: { emailRedirectTo: redirectUrl }
     });
     return { error: error?.message || null };
   };
@@ -64,8 +65,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const sendPasswordReset = async (email: string) => {
     if (!supabase) return { error: configurationError };
+    const redirectUrl = `${window.location.origin}/reset-password`;
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`
+      redirectTo: redirectUrl
     });
     return { error: error?.message || null };
   };

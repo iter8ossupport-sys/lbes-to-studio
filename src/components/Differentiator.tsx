@@ -61,10 +61,49 @@ export const Differentiator = () => {
             Start with what you know. <br />
             Not what you don't.
           </h2>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
-            Whether you're just beginning to define your strategy or already have a detailed system, LBES adjusts the interview to what you can actually explain.
+          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+            You don't need to speak developer language. Explain your strategy the way you understand it. LBES handles the translation into a structured engineering specification.
           </p>
         </motion.div>
+
+        {/* 3 Compact Steps */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex flex-col bg-[#0A0A0A] border border-blue-500/30 rounded-2xl p-8 hover:border-blue-500/50 transition-all"
+          >
+            <span className="text-sm font-bold text-blue-400 tracking-wider uppercase mb-2">01 — Explain</span>
+            <h3 className="text-xl font-bold text-white mb-2">Tell us how you trade.</h3>
+            <p className="text-gray-400 text-sm">Explain your strategy rules, indicators, entries, and exits in plain trader terms.</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex flex-col bg-[#0A0A0A] border border-orange-500/30 rounded-2xl p-8 hover:border-orange-500/50 transition-all"
+          >
+            <span className="text-sm font-bold text-orange-400 tracking-wider uppercase mb-2">02 — Verify</span>
+            <h3 className="text-xl font-bold text-white mb-2">See what LBES understood before engineering.</h3>
+            <p className="text-gray-400 text-sm">Review your structured strategy specification and confirm all parameters before code is built.</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col bg-[#0A0A0A] border border-purple-500/30 rounded-2xl p-8 hover:border-purple-500/50 transition-all"
+          >
+            <span className="text-sm font-bold text-purple-400 tracking-wider uppercase mb-2">03 — Understand</span>
+            <h3 className="text-xl font-bold text-white mb-2">Receive your software and learn how to read the testing evidence.</h3>
+            <p className="text-gray-400 text-sm">Get your TradingView indicator or MT5 system along with clear educational testing reports.</p>
+          </motion.div>
+        </div>
 
         {/* Level Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
